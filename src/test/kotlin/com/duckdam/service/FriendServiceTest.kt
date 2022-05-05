@@ -71,8 +71,8 @@ class FriendServiceTest {
         }.onSuccess {
             Assertions.fail("This should be failed.")
         }.onFailure {
-            Assertions.assertThat(it is NotFoundException).isEqualTo(true)
-            Assertions.assertThat(it.message).isEqualTo("User [$invalidUid] was not registered.")
+            assertThat(it is NotFoundException).isEqualTo(true)
+            assertThat(it.message).isEqualTo("User [$invalidUid] was not registered.")
         }
     }
 

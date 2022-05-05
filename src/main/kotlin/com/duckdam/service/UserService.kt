@@ -57,7 +57,7 @@ class UserService (
         }
 
         // Generate JWT token
-        val jwtToken: JWTToken = jwtTokenProvider.generateToken(user.email, user.roles.toList())
+        val jwtToken: JWTToken = jwtTokenProvider.generateToken(user.id.toString(), user.roles.toList())
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(

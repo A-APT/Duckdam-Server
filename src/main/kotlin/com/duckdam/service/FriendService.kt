@@ -24,7 +24,7 @@ class FriendService (
         friendRepository.save(Friend(uid = uid, friendId = targetId))
     }
 
-    fun findMyFriends(uid: Long):ResponseEntity<List<FriendResponseDto>> {
+    fun findMyFriends(uid: Long): ResponseEntity<List<FriendResponseDto>> {
         val friendList: List<Friend> = friendRepository.findAllByUid(uid)
         val friendResList: MutableList<FriendResponseDto> = mutableListOf()
         friendList.forEach {

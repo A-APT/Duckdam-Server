@@ -16,7 +16,7 @@ class SecurityConfig(private val jwtTokenProvider: JWTTokenProvider): WebSecurit
             .headers().frameOptions().disable()
             .and()
                 .authorizeRequests()
-                .antMatchers().hasRole("USER")
+                .antMatchers("/friend/**").hasRole("USER")
                 .antMatchers("/**").permitAll()
             .and()
                 .addFilterBefore(
