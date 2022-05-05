@@ -154,7 +154,7 @@ class EmailControllerTest {
         )
         // act, assert
         restTemplate
-            .postForEntity("${baseAddress}/user/email/verify", emailTokenDto, UnauthorizedException::class.java)
+            .postForEntity("${baseAddress}/user/email/verify", emailTokenDto, Unit::class.java)
             .apply {
                 assertThat(statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
             }

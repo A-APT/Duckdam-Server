@@ -70,7 +70,7 @@ class FriendControllerTest {
         val token: String = registerAndLogin()
         val httpHeaders = HttpHeaders()
         val httpEntity = HttpEntity(null, httpHeaders)
-        val uid2: Long = userService.register(mockRegisterDto.copy(email = "email"))
+        val uid2: Long = userService.register(mockRegisterDto.copy(email = "email", name = "new"))
 
         // act, assert
         restTemplate
@@ -88,7 +88,7 @@ class FriendControllerTest {
             this["Authorization"] = "Bearer $token"
         }
         val httpEntity = HttpEntity(null, httpHeaders)
-        val uid2: Long = userService.register(mockRegisterDto.copy(email = "email"))
+        val uid2: Long = userService.register(mockRegisterDto.copy(email = "email", name = "new"))
 
         // act, assert
         restTemplate
@@ -123,7 +123,7 @@ class FriendControllerTest {
         val token: String = registerAndLogin()
         val httpHeaders = HttpHeaders()
         val httpEntity = HttpEntity(null, httpHeaders)
-        val uid2: Long = userService.register(mockRegisterDto.copy(email = "email"))
+        val uid2: Long = userService.register(mockRegisterDto.copy(email = "email", name = "new"))
         friendService.followFriend(mockUid, uid2)
 
         // act, assert
@@ -142,7 +142,7 @@ class FriendControllerTest {
             this["Authorization"] = "Bearer $token"
         }
         val httpEntity = HttpEntity(null, httpHeaders)
-        val uid2: Long = userService.register(mockRegisterDto.copy(email = "email"))
+        val uid2: Long = userService.register(mockRegisterDto.copy(email = "email", name = "new"))
         friendService.followFriend(mockUid, uid2)
 
         // act, assert

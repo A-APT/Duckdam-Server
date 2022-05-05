@@ -21,11 +21,16 @@ class UserService (
     ) {
 
     fun register(registerDto: RegisterDto): Long {
-        // check duplicate
+        // check duplicate for email and name
         runCatching {
             userRepository.findByEmail(registerDto.email)
         }.onSuccess {
             throw ConflictException("User email [${registerDto.email}] is already registered.")
+        }
+        runCatching {
+            userRepository.findByName(registerDto.name)
+        }.onSuccess {
+            throw ConflictException("User name [${registerDto.name}] is already registered.")
         }
 
         // save to server

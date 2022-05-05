@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface UserRepository: JpaRepository<User, Long> {
     fun findByEmail(email: String): User
+    fun findByName(name: String): User
     fun findByNameContains(query: String): MutableList<User>
 }

@@ -55,11 +55,11 @@ class UserServiceTest {
     }
 
     @Test
-    fun is_register_works_on_duplicate() {
+    fun is_register_works_on_duplicate_email() {
         // act
         userService.register(mockRegisterDto)
         runCatching {
-            userService.register(mockRegisterDto)
+            userService.register(mockRegisterDto.copy(name = "new"))
         }.onSuccess {
             fail("This should be failed.")
         }.onFailure {
@@ -69,9 +69,23 @@ class UserServiceTest {
     }
 
     @Test
+    fun is_register_works_on_duplicate_name() {
+        // act
+        userService.register(mockRegisterDto)
+        runCatching {
+            userService.register(mockRegisterDto.copy(email = "new"))
+        }.onSuccess {
+            fail("This should be failed.")
+        }.onFailure {
+            assertThat(it is ConflictException).isEqualTo(true)
+            assertThat(it.message).isEqualTo("User name [${mockRegisterDto.name}] is already registered.")
+        }
+    }
+
+    @Test
     fun is_login_works_well() {
         // arrange
-        userService.register(mockRegisterDto)
+        val uid: Long = userService.register(mockRegisterDto)
         val loginRequestDto = LoginRequestDto(
             email = mockRegisterDto.email,
             password = mockRegisterDto.password
@@ -87,7 +101,7 @@ class UserServiceTest {
         assertThat(loginResponseDto).isNotEqualTo(null)
         loginResponseDto?.apply {
             assertThat(jwtTokenProvider.verifyToken(token)).isEqualTo(true)
-            assertThat(jwtTokenProvider.getUserPK(token)).isEqualTo(loginRequestDto.email)
+            assertThat(jwtTokenProvider.getUserPK(token).toLong()).isEqualTo(uid)
         }
     }
 
@@ -133,7 +147,7 @@ class UserServiceTest {
     @Test
     fun is_refreshToken_works_well() {
         // arrange
-        userService.register(mockRegisterDto)
+        val uid: Long = userService.register(mockRegisterDto)
         val loginRequestDto = LoginRequestDto(
             email = mockRegisterDto.email,
             password = mockRegisterDto.password
@@ -146,7 +160,7 @@ class UserServiceTest {
         // assert
         jwtToken.apply {
             assertThat(jwtTokenProvider.verifyToken(token)).isEqualTo(true)
-            assertThat(jwtTokenProvider.getUserPK(token)).isEqualTo(loginRequestDto.email)
+            assertThat(jwtTokenProvider.getUserPK(token).toLong()).isEqualTo(uid)
         }
     }
 

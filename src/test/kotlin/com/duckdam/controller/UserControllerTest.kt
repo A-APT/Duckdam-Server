@@ -69,13 +69,26 @@ class UserControllerTest {
     }
 
     @Test
-    fun is_register_works_on_duplicate() {
+    fun is_register_works_on_duplicate_email() {
         // arrange
         userService.register(mockRegisterDto)
 
         // act, assert
         restTemplate
-            .postForEntity("${baseAddress}/user/register", mockRegisterDto, Unit::class.java)
+            .postForEntity("${baseAddress}/user/register", mockRegisterDto.copy(name = "new"), Unit::class.java)
+            .apply {
+                assertThat(statusCode).isEqualTo(HttpStatus.CONFLICT)
+            }
+    }
+
+    @Test
+    fun is_register_works_on_duplicate_name() {
+        // arrange
+        userService.register(mockRegisterDto)
+
+        // act, assert
+        restTemplate
+            .postForEntity("${baseAddress}/user/register", mockRegisterDto.copy(email = "new"), Unit::class.java)
             .apply {
                 assertThat(statusCode).isEqualTo(HttpStatus.CONFLICT)
             }
@@ -157,10 +170,9 @@ class UserControllerTest {
 
         // act, assert
         restTemplate
-            .postForEntity("${baseAddress}/user/refresh", "invalid-token", UnauthorizedException::class.java)
-            .body!!
+            .postForEntity("${baseAddress}/user/refresh", "invalid-token", Unit::class.java)
             .apply {
-                assertThat(message).isEqualTo("Failed when refresh token.")
+                assertThat(statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
             }
     }
 

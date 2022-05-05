@@ -45,7 +45,7 @@ class FriendServiceTest {
     fun is_followFriend_works_well() {
         // arrange
         val uid1: Long = userService.register(mockRegisterDto)
-        val uid2: Long = userService.register(mockRegisterDto.copy(email = "email"))
+        val uid2: Long = userService.register(mockRegisterDto.copy(email = "email", name = "new"))
 
         // act
         friendService.followFriend(uid1, uid2)
@@ -93,7 +93,7 @@ class FriendServiceTest {
         // arrange
         val uid1: Long = userService.register(mockRegisterDto)
         val uid2: Long = userService.register(mockRegisterDto.copy(email = "email", name="name"))
-        val uid3: Long = userService.register(mockRegisterDto.copy(email = "email2", profile = "test"))
+        val uid3: Long = userService.register(mockRegisterDto.copy(email = "email2", name = "new", profile = "test"))
 
         friendService.followFriend(uid1, uid2)
         friendService.followFriend(uid1, uid3)
