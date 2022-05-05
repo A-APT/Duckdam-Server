@@ -16,6 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.junit.jupiter.SpringExtension
 
@@ -158,6 +161,43 @@ class UserControllerTest {
             .body!!
             .apply {
                 assertThat(message).isEqualTo("Failed when refresh token.")
+            }
+    }
+
+    @Test
+    fun is_searchByName_throw_on_no_auth_token() {
+        // arrange
+        val token: String = registerAndLogin()
+        val httpHeaders = HttpHeaders()
+        val httpEntity = HttpEntity(null, httpHeaders)
+        val query = "test"
+
+        // act, assert
+        restTemplate
+            .exchange("${baseAddress}/user/search/$query", HttpMethod.GET, httpEntity, Unit::class.java)
+            .apply {
+                assertThat(statusCode).isEqualTo(HttpStatus.FORBIDDEN)
+            }
+    }
+
+    @Test
+    fun is_searchByName_works_well() {
+        // arrange
+        val token: String = registerAndLogin()
+        val httpHeaders = HttpHeaders().apply {
+            this["Authorization"] = "Bearer $token"
+        }
+        val httpEntity = HttpEntity(null, httpHeaders)
+        val query = "test"
+        userService.register(mockRegisterDto.copy(email = "email1", name = "atest1"))
+        userService.register(mockRegisterDto.copy(email = "email3", name = "teST"))
+
+        // act, assert
+        restTemplate
+            .exchange("${baseAddress}/user/search/$query", HttpMethod.GET, httpEntity, Array<UserResponseDto>::class.java)
+            .apply {
+                assertThat(statusCode).isEqualTo(HttpStatus.OK)
+                assertThat(body!!.size).isEqualTo(1)
             }
     }
 }

@@ -4,9 +4,7 @@ import com.duckdam.dto.JWTToken
 import com.duckdam.dto.user.*
 import com.duckdam.service.UserService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 class UserController(private val userService: UserService) {
@@ -25,5 +23,10 @@ class UserController(private val userService: UserService) {
     @PostMapping("/user/refresh")
     fun refreshToken(@RequestBody refreshToken: String): ResponseEntity<JWTToken> {
         return userService.refreshToken(refreshToken)
+    }
+
+    @GetMapping("/user/search/{query}")
+    fun searchByName(@RequestHeader httpHeaders: Map<String, String>, @PathVariable query: String): ResponseEntity<List<UserResponseDto>> {
+        return userService.searchByName(query)
     }
 }

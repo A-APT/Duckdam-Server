@@ -7,6 +7,7 @@ import com.duckdam.dto.JWTToken
 import com.duckdam.dto.user.LoginRequestDto
 import com.duckdam.dto.user.LoginResponseDto
 import com.duckdam.dto.user.RegisterDto
+import com.duckdam.dto.user.UserResponseDto
 import com.duckdam.errors.exception.ConflictException
 import com.duckdam.errors.exception.NotFoundException
 import com.duckdam.errors.exception.UnauthorizedException
@@ -168,5 +169,19 @@ class UserServiceTest {
             assertThat(it is UnauthorizedException).isEqualTo(true)
             assertThat(it.message).isEqualTo("Failed when refresh token.")
         }
+    }
+
+    @Test
+    fun is_searchByName_works_well() {
+        // arrange
+        userService.register(mockRegisterDto.copy(email = "email1", name = "test1"))
+        userService.register(mockRegisterDto.copy(email = "email2", name = "test2"))
+        userService.register(mockRegisterDto.copy(email = "email3", name = "teST"))
+
+        // act
+        val result: List<UserResponseDto> = userService.searchByName("test").body!!
+
+        // assert
+        assertThat(result.size).isEqualTo(2)
     }
 }

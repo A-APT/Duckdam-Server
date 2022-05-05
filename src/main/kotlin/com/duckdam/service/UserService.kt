@@ -6,6 +6,7 @@ import com.duckdam.dto.JWTToken
 import com.duckdam.dto.user.LoginRequestDto
 import com.duckdam.dto.user.LoginResponseDto
 import com.duckdam.dto.user.RegisterDto
+import com.duckdam.dto.user.UserResponseDto
 import com.duckdam.errors.exception.ConflictException
 import com.duckdam.errors.exception.NotFoundException
 import com.duckdam.security.JWTTokenProvider
@@ -71,6 +72,25 @@ class UserService (
             .status(HttpStatus.OK)
             .body(
                 JWTToken(token = jwtToken.token, refreshToken = jwtToken.refreshToken)
+            )
+    }
+
+    fun searchByName(query: String): ResponseEntity<List<UserResponseDto>> {
+        val searchResult: MutableList<User> = userRepository.findByNameContains(query)
+        val responseList: MutableList<UserResponseDto> = mutableListOf()
+        searchResult.forEach {
+            val user: User = userRepository.findById(it.id).get()
+            responseList.add(
+                UserResponseDto(
+                    uid =  user.id,
+                    name = user.name,
+                    profile = user.profile
+                ))
+        }
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(
+                responseList
             )
     }
 }
