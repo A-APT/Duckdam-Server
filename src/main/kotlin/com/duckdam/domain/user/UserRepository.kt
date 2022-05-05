@@ -1,10 +1,9 @@
 package com.duckdam.domain.user
 
-import org.bson.types.ObjectId
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepository: MongoRepository<User, ObjectId> {
+interface UserRepository: JpaRepository<User, Long> {
     fun findByEmail(email: String): User
 }

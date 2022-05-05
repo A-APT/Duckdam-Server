@@ -69,10 +69,6 @@ dependencies {
     // Email
     implementation("org.springframework.boot:spring-boot-starter-mail")
 
-    // mongoDB
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-    implementation("de.flapdoodle.embed:de.flapdoodle.embed.mongo")
-
     // swagger
     implementation("io.springfox:springfox-swagger2:2.9.2")
     implementation("io.springfox:springfox-swagger-ui:2.9.2")

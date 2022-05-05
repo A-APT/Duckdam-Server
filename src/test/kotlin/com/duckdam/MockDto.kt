@@ -7,5 +7,6 @@ object MockDto {
         name = "je",
         password = "test",
         email = "email@konkuk.ac.kr",
+        profile = null,
     )
 }

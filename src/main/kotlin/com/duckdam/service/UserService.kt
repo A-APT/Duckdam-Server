@@ -33,7 +33,9 @@ class UserService (
                 name = registerDto.name,
                 password = registerDto.password,
                 email = registerDto.email,
-                roles = listOf("ROLE_USER")
+                profile = registerDto.profile,
+                sticker = "00000",
+                roles = setOf("ROLE_USER")
             )
         )
     }

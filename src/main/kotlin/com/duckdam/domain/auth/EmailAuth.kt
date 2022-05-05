@@ -1,15 +1,22 @@
 package com.duckdam.domain.auth
 
-import org.bson.types.ObjectId
-import org.springframework.data.mongodb.core.mapping.Document
 import javax.persistence.*
 
-@Document(collection="EmailAuth")
+@Entity
 class EmailAuth (
     @Id
-    var id: ObjectId = ObjectId(),
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long = -1,
+
+    @Column
     var email: String, // target email
+
+    @Column
     var token: String, // validate token
+
+    @Column
     var expirationTime: Long, // time in milliseconds
+
+    @Column
     var expired: Boolean,
 )

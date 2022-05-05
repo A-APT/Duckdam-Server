@@ -1,7 +1,5 @@
 package com.duckdam.security
 
-import com.duckdam.domain.user.User
-import com.duckdam.domain.user.UserRepository
 import com.duckdam.dto.JWTToken
 import com.duckdam.errors.exception.UnauthorizedException
 import io.jsonwebtoken.Claims
@@ -11,16 +9,17 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.PropertySource
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import java.util.*
 
 @PropertySource("classpath:security.properties")
 @Component
-class JWTTokenProvider(private val userRepository: UserRepository) {
+class JWTTokenProvider(private val userDetailsService: CustomUserDetailsService) {
     @Value("\${jwt.signing.key}")
     private lateinit var SIGNING_KEY: String
 
-    val HEADER_STRING: String = "Authorization"
+    val HEADER_STRING: String = "authorization"
     val TOKEN_PREFIX: String = "Bearer"
 
     private val tokenPeriod: Long = 1000L * 60L * 10L // 10 minute
@@ -68,9 +67,9 @@ class JWTTokenProvider(private val userRepository: UserRepository) {
     }
 
     fun getAuthentication(jwtToken: String): Authentication {
-        val userEntity: User = userRepository.findByEmail(getUserPK(jwtToken))
+        val userDetails: UserDetails = userDetailsService.loadUserByUsername(getUserPK(jwtToken))
         return UsernamePasswordAuthenticationToken(
-            userEntity, "", userEntity.getAuthorities()
+            userDetails, "", userDetails.authorities
         )
     }
 
