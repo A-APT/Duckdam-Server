@@ -1,6 +1,6 @@
 package com.duckdam.controller
 
-import com.duckdam.dto.friend.FriendResponseDto
+import com.duckdam.dto.user.UserResponseDto
 import com.duckdam.security.JWTTokenProvider
 import com.duckdam.service.FriendService
 import org.springframework.http.ResponseEntity
@@ -20,7 +20,7 @@ class FriendController (
     }
 
     @GetMapping("/friend")
-    fun findMyFriends(@RequestHeader httpHeaders: Map<String, String>): ResponseEntity<List<FriendResponseDto>> {
+    fun findMyFriends(@RequestHeader httpHeaders: Map<String, String>): ResponseEntity<List<UserResponseDto>> {
         val uid: Long = jwtTokenProvider.getUserPK(jwtTokenProvider.getTokenFromHeader(httpHeaders)!!).toLong()
         return friendService.findMyFriends(uid)
     }

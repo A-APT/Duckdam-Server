@@ -3,7 +3,7 @@ package com.duckdam.controller
 import com.duckdam.MockDto
 import com.duckdam.domain.friend.FriendRepository
 import com.duckdam.domain.user.UserRepository
-import com.duckdam.dto.friend.FriendResponseDto
+import com.duckdam.dto.user.UserResponseDto
 import com.duckdam.dto.user.LoginRequestDto
 import com.duckdam.dto.user.RegisterDto
 import com.duckdam.service.FriendService
@@ -147,7 +147,7 @@ class FriendControllerTest {
 
         // act, assert
         restTemplate
-            .exchange("${baseAddress}/friend", HttpMethod.GET, httpEntity, Array<FriendResponseDto>::class.java)
+            .exchange("${baseAddress}/friend", HttpMethod.GET, httpEntity, Array<UserResponseDto>::class.java)
             .apply {
                 assertThat(statusCode).isEqualTo(HttpStatus.OK)
                 assertThat(body!!.size).isEqualTo(1)
