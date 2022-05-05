@@ -19,7 +19,7 @@ class UserService (
     private val jwtTokenProvider: JWTTokenProvider,
     ) {
 
-    fun register(registerDto: RegisterDto) {
+    fun register(registerDto: RegisterDto): Long {
         // check duplicate
         runCatching {
             userRepository.findByEmail(registerDto.email)
@@ -28,7 +28,7 @@ class UserService (
         }
 
         // save to server
-        userRepository.save(
+        return userRepository.save(
             User(
                 name = registerDto.name,
                 password = registerDto.password,
@@ -37,7 +37,7 @@ class UserService (
                 sticker = "00000",
                 roles = setOf("ROLE_USER")
             )
-        )
+        ).id
     }
 
     fun login(loginRequestDto: LoginRequestDto): ResponseEntity<LoginResponseDto> {
