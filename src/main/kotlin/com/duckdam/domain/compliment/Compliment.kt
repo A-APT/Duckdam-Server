@@ -1,5 +1,6 @@
 package com.duckdam.domain.compliment
 
+import com.duckdam.dto.compliment.ComplimentResponseDto
 import java.util.*
 import javax.persistence.*
 
@@ -24,4 +25,12 @@ class Compliment (
     @Column(nullable = false)
     var date: Date
 
-)
+) {
+
+    fun toComplimentResponseDto(): ComplimentResponseDto {
+        return ComplimentResponseDto(
+            fromId, toId, stickerNum, message, date
+        )
+    }
+
+}
