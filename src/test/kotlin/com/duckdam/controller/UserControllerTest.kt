@@ -219,7 +219,6 @@ class UserControllerTest {
         val token: String = registerAndLogin()
         val httpHeaders = HttpHeaders()
         val httpEntity = HttpEntity(null, httpHeaders)
-        val query = "test"
 
         // act, assert
         restTemplate
@@ -244,6 +243,39 @@ class UserControllerTest {
             .apply {
                 assertThat(statusCode).isEqualTo(HttpStatus.OK)
                 assertThat(body!!.size).isEqualTo(5)
+            }
+    }
+
+    @Test
+    fun is_isEligibleForSlot_throws_on_no_auth_token() {
+        // arrange
+        val token: String = registerAndLogin()
+        val httpHeaders = HttpHeaders()
+        val httpEntity = HttpEntity(null, httpHeaders)
+
+        // act, assert
+        restTemplate
+            .exchange("${baseAddress}/user/slot", HttpMethod.GET, httpEntity, Unit::class.java)
+            .apply {
+                assertThat(statusCode).isEqualTo(HttpStatus.FORBIDDEN)
+            }
+    }
+
+    @Test
+    fun is_isEligibleForSlot_works_well() {
+        // arrange
+        val token: String = registerAndLogin()
+        val httpHeaders = HttpHeaders().apply {
+            this["Authorization"] = "Bearer $token"
+        }
+        val httpEntity = HttpEntity(null, httpHeaders)
+
+        // act, assert
+        restTemplate
+            .exchange("${baseAddress}/user/slot", HttpMethod.GET, httpEntity, Boolean::class.java)
+            .apply {
+                assertThat(statusCode).isEqualTo(HttpStatus.OK)
+                assertThat(body!!).isEqualTo(true)
             }
     }
 }

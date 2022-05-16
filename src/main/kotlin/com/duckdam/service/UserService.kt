@@ -13,6 +13,9 @@ import com.duckdam.security.JWTTokenProvider
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 
 @Service
 class UserService (
@@ -32,7 +35,7 @@ class UserService (
         }.onSuccess {
             throw ConflictException("User name [${registerDto.name}] is already registered.")
         }
-
+        val before = LocalDate.now().minusDays(1) // yesterday
         // save to server
         return userRepository.save(
             User(
@@ -41,6 +44,7 @@ class UserService (
                 email = registerDto.email,
                 profile = registerDto.profile,
                 sticker = "00000",
+                latestSlot = before,
                 roles = setOf("ROLE_USER")
             )
         ).id
@@ -107,6 +111,16 @@ class UserService (
             .status(HttpStatus.OK)
             .body(
                 stickerList
+            )
+    }
+
+    fun isEligibleForSlot(userId: Long): ResponseEntity<Boolean> { /* as of today */
+        val latestSlot: LocalDate = userRepository.findById(userId).get().latestSlot
+        val today: LocalDate = LocalDate.now()
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(
+                today.isAfter(latestSlot)
             )
     }
 }

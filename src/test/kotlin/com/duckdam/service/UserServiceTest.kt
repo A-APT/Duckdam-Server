@@ -21,6 +21,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.time.LocalDate
 
 @SpringBootTest
 @ExtendWith(SpringExtension::class)
@@ -233,5 +234,27 @@ class UserServiceTest {
         assertThat(result[2]).isEqualTo(true)
         assertThat(result[3]).isEqualTo(false)
         assertThat(result[4]).isEqualTo(true)
+    }
+
+    @Test
+    fun is_isEligibleForSlot_works_well_true() {
+        // arrange
+        val uid: Long = userService.register(mockRegisterDto)
+
+        // act & assert
+        assertThat(userService.isEligibleForSlot(uid).body!!).isEqualTo(true)
+    }
+
+    @Test
+    fun is_isEligibleForSlot_works_well_false() {
+        // arrange
+        val uid: Long = userService.register(mockRegisterDto)
+        userRepository.findById(uid).get().apply {
+            latestSlot = LocalDate.now()
+            userRepository.save(this)
+        }
+
+        // act & assert
+        assertThat(userService.isEligibleForSlot(uid).body!!).isEqualTo(false)
     }
 }

@@ -39,4 +39,10 @@ class UserController(
         val uid: Long = jwtTokenProvider.getUserPK(jwtTokenProvider.getTokenFromHeader(httpHeaders)!!).toLong()
         return userService.getStickerList(uid)
     }
+
+    @GetMapping("/user/slot")
+    fun isEligibleForSlot(@RequestHeader httpHeaders: Map<String, String>): ResponseEntity<Boolean> {
+        val uid: Long = jwtTokenProvider.getUserPK(jwtTokenProvider.getTokenFromHeader(httpHeaders)!!).toLong()
+        return userService.isEligibleForSlot(uid)
+    }
 }

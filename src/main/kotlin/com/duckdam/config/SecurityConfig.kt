@@ -20,6 +20,7 @@ class SecurityConfig(private val jwtTokenProvider: JWTTokenProvider): WebSecurit
                                         "/compliment/**",
                                         "/compliments/**",
                                         "/user/stickers",
+                                        "/user/slot",
                                         "/users/**").hasRole("USER")
                 .antMatchers("/**").permitAll()
             .and()
