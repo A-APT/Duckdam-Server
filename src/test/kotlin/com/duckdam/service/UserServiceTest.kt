@@ -198,4 +198,40 @@ class UserServiceTest {
         // assert
         assertThat(result.size).isEqualTo(2)
     }
+
+    @Test
+    fun is_getStickerList_works_well_on_empty() {
+        // arrange
+        val uid: Long = userService.register(mockRegisterDto)
+
+        // act
+        val result: List<Boolean> = userService.getStickerList(uid).body!!
+
+        // assert
+        assertThat(result.size).isEqualTo(5)
+        result.forEach {
+            assertThat(it).isEqualTo(false)
+        }
+    }
+
+    @Test
+    fun is_getStickerList_works_well() {
+        // arrange
+        val uid: Long = userService.register(mockRegisterDto)
+        userRepository.findById(uid).get().apply {
+            sticker = "01101"
+            userRepository.save(this)
+        }
+
+        // act
+        val result: List<Boolean> = userService.getStickerList(uid).body!!
+
+        // assert
+        assertThat(result.size).isEqualTo(5)
+        assertThat(result[0]).isEqualTo(false)
+        assertThat(result[1]).isEqualTo(true)
+        assertThat(result[2]).isEqualTo(true)
+        assertThat(result[3]).isEqualTo(false)
+        assertThat(result[4]).isEqualTo(true)
+    }
 }

@@ -98,4 +98,15 @@ class UserService (
                 responseList
             )
     }
+
+    fun getStickerList(userId: Long): ResponseEntity<List<Boolean>> {
+        val sticker: String = userRepository.findById(userId).get().sticker
+        val stickerList: MutableList<Boolean> = mutableListOf()
+        sticker.forEach { stickerList.add(it == '1') } // 1 is ture(have)
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(
+                stickerList
+            )
+    }
 }

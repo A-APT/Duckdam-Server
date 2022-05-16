@@ -212,4 +212,38 @@ class UserControllerTest {
                 assertThat(body!!.size).isEqualTo(1)
             }
     }
+
+    @Test
+    fun is_getStickerList_throws_on_no_auth_token() {
+        // arrange
+        val token: String = registerAndLogin()
+        val httpHeaders = HttpHeaders()
+        val httpEntity = HttpEntity(null, httpHeaders)
+        val query = "test"
+
+        // act, assert
+        restTemplate
+            .exchange("${baseAddress}/user/stickers", HttpMethod.GET, httpEntity, Unit::class.java)
+            .apply {
+                assertThat(statusCode).isEqualTo(HttpStatus.FORBIDDEN)
+            }
+    }
+
+    @Test
+    fun is_getStickerList_works_well() {
+        // arrange
+        val token: String = registerAndLogin()
+        val httpHeaders = HttpHeaders().apply {
+            this["Authorization"] = "Bearer $token"
+        }
+        val httpEntity = HttpEntity(null, httpHeaders)
+
+        // act, assert
+        restTemplate
+            .exchange("${baseAddress}/user/stickers", HttpMethod.GET, httpEntity, Array<Boolean>::class.java)
+            .apply {
+                assertThat(statusCode).isEqualTo(HttpStatus.OK)
+                assertThat(body!!.size).isEqualTo(5)
+            }
+    }
 }
