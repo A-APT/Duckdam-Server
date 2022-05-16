@@ -25,7 +25,7 @@ class UserController(private val userService: UserService) {
         return userService.refreshToken(refreshToken)
     }
 
-    @GetMapping("/user/search/{query}")
+    @GetMapping("/users/{query}")
     fun searchByName(@RequestHeader httpHeaders: Map<String, String>, @PathVariable query: String): ResponseEntity<List<UserResponseDto>> {
         return userService.searchByName(query)
     }

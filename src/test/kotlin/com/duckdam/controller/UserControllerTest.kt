@@ -186,7 +186,7 @@ class UserControllerTest {
 
         // act, assert
         restTemplate
-            .exchange("${baseAddress}/user/search/$query", HttpMethod.GET, httpEntity, Unit::class.java)
+            .exchange("${baseAddress}/users/$query", HttpMethod.GET, httpEntity, Unit::class.java)
             .apply {
                 assertThat(statusCode).isEqualTo(HttpStatus.FORBIDDEN)
             }
@@ -206,7 +206,7 @@ class UserControllerTest {
 
         // act, assert
         restTemplate
-            .exchange("${baseAddress}/user/search/$query", HttpMethod.GET, httpEntity, Array<UserResponseDto>::class.java)
+            .exchange("${baseAddress}/users/$query", HttpMethod.GET, httpEntity, Array<UserResponseDto>::class.java)
             .apply {
                 assertThat(statusCode).isEqualTo(HttpStatus.OK)
                 assertThat(body!!.size).isEqualTo(1)

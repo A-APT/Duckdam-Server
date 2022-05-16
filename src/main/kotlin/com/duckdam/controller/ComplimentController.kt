@@ -20,7 +20,7 @@ class ComplimentController (
         return ResponseEntity.noContent().build()
     }
 
-    @GetMapping("/compliments/my")
+    @GetMapping("/compliments")
     fun findCompliments(@RequestHeader httpHeaders: Map<String, String>): ResponseEntity<List<ComplimentResponseDto>> {
         val uid: Long = jwtTokenProvider.getUserPK(jwtTokenProvider.getTokenFromHeader(httpHeaders)!!).toLong()
         return complimentService.findCompliments(uid)

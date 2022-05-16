@@ -126,7 +126,7 @@ class ComplimentControllerTest {
 
         // act, assert
         restTemplate
-            .exchange("${baseAddress}/compliments/my", HttpMethod.GET, httpEntity, Unit::class.java)
+            .exchange("${baseAddress}/compliments", HttpMethod.GET, httpEntity, Unit::class.java)
             .apply {
                 assertThat(statusCode).isEqualTo(HttpStatus.FORBIDDEN)
             }
@@ -146,7 +146,7 @@ class ComplimentControllerTest {
 
         // act, assert
         restTemplate
-            .exchange("${baseAddress}/compliments/my", HttpMethod.GET, httpEntity, Array<ComplimentResponseDto>::class.java)
+            .exchange("${baseAddress}/compliments", HttpMethod.GET, httpEntity, Array<ComplimentResponseDto>::class.java)
             .apply {
                 assertThat(statusCode).isEqualTo(HttpStatus.OK)
                 assertThat(body!!.size).isEqualTo(1)
