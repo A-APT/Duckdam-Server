@@ -6,6 +6,7 @@ import com.duckdam.domain.user.UserRepository
 import com.duckdam.dto.compliment.ComplimentRequestDto
 import com.duckdam.dto.compliment.ComplimentResponseDto
 import com.duckdam.dto.user.RegisterDto
+import com.duckdam.errors.exception.ForbiddenException
 import com.duckdam.errors.exception.NotFoundException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
@@ -153,6 +154,40 @@ class ComplimentServiceTest {
         }.onFailure {
             assertThat(it is NotFoundException).isEqualTo(true)
             assertThat(it.message).isEqualTo("User [${invalidId}] was not registered.")
+        }
+    }
+
+    @Test
+    fun is_slot_works_well() {
+        // arrange
+        val uid1: Long = userService.register(mockRegisterDto)
+
+        // act
+        val complimentResponseDto: ComplimentResponseDto = complimentService.slot(uid1).body!!
+        println(complimentResponseDto)
+
+        // assert
+        complimentResponseDto.apply {
+            assertThat(fromId).isEqualTo(-1)
+            assertThat(toId).isEqualTo(uid1)
+        }
+        assertThat(complimentRepository.findAllByFromId(-1).size).isEqualTo(1)
+    }
+
+    @Test
+    fun is_slot_throws_when_ineligible_to_draw_today() {
+        // arrange
+        val uid1: Long = userService.register(mockRegisterDto)
+        complimentService.slot(uid1)
+
+        // act & assert
+        runCatching {
+            complimentService.slot(uid1)
+        }.onSuccess {
+            fail("This should be failed.")
+        }.onFailure {
+            assertThat(it is ForbiddenException).isEqualTo(true)
+            assertThat(it.message).isEqualTo("User has already drawn a compliment from the slot today.")
         }
     }
 }
