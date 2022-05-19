@@ -209,9 +209,12 @@ class UserServiceTest {
         val result: List<Boolean> = userService.getStickerList(uid).body!!
 
         // assert
-        assertThat(result.size).isEqualTo(5)
-        result.forEach {
-            assertThat(it).isEqualTo(false)
+        assertThat(result.size).isEqualTo(10)
+        for(i in 0..4) {
+            assertThat(result[i]).isEqualTo(true)
+        }
+        for(i in 5..9) {
+            assertThat(result[i]).isEqualTo(false)
         }
     }
 
@@ -228,12 +231,15 @@ class UserServiceTest {
         val result: List<Boolean> = userService.getStickerList(uid).body!!
 
         // assert
-        assertThat(result.size).isEqualTo(5)
-        assertThat(result[0]).isEqualTo(false)
-        assertThat(result[1]).isEqualTo(true)
-        assertThat(result[2]).isEqualTo(true)
-        assertThat(result[3]).isEqualTo(false)
-        assertThat(result[4]).isEqualTo(true)
+        assertThat(result.size).isEqualTo(10)
+        for(i in 0..4) {
+            assertThat(result[i]).isEqualTo(true)
+        }
+        assertThat(result[5]).isEqualTo(false)
+        assertThat(result[6]).isEqualTo(true)
+        assertThat(result[7]).isEqualTo(true)
+        assertThat(result[8]).isEqualTo(false)
+        assertThat(result[9]).isEqualTo(true)
     }
 
     @Test

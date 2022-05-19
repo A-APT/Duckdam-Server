@@ -242,7 +242,7 @@ class UserControllerTest {
             .exchange("${baseAddress}/user/stickers", HttpMethod.GET, httpEntity, Array<Boolean>::class.java)
             .apply {
                 assertThat(statusCode).isEqualTo(HttpStatus.OK)
-                assertThat(body!!.size).isEqualTo(5)
+                assertThat(body!!.size).isEqualTo(10)
             }
     }
 

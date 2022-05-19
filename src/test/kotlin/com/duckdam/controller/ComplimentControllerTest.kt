@@ -104,7 +104,7 @@ class ComplimentControllerTest {
     fun is_generateCompliment_throws_on_invalid_toId() {
         // arrange
         val token: String = registerAndLogin()
-        val invalidId: Long = 10
+        val invalidId: Long = -10
         val httpHeaders = HttpHeaders().apply {
             this["Authorization"] = "Bearer $token"
         }
