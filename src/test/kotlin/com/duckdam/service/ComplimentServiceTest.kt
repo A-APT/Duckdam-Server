@@ -164,7 +164,6 @@ class ComplimentServiceTest {
 
         // act
         val complimentResponseDto: ComplimentResponseDto = complimentService.slot(uid1).body!!
-        println(complimentResponseDto)
 
         // assert
         complimentResponseDto.apply {

@@ -31,4 +31,10 @@ class ComplimentController (
         val uid: Long = jwtTokenProvider.getUserPK(jwtTokenProvider.getTokenFromHeader(httpHeaders)!!).toLong()
         return complimentService.findComplimentsByFromAndTo(fromId = uid, toId = toId)
     }
+
+    @PostMapping("/compliment/slot")
+    fun slot(@RequestHeader httpHeaders: Map<String, String>): ResponseEntity<ComplimentResponseDto> {
+        val uid: Long = jwtTokenProvider.getUserPK(jwtTokenProvider.getTokenFromHeader(httpHeaders)!!).toLong()
+        return complimentService.slot(uid)
+    }
 }

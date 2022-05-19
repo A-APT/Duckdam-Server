@@ -7,6 +7,7 @@ import com.duckdam.dto.compliment.ComplimentRequestDto
 import com.duckdam.dto.compliment.ComplimentResponseDto
 import com.duckdam.dto.user.LoginRequestDto
 import com.duckdam.dto.user.RegisterDto
+import com.duckdam.errors.exception.ForbiddenException
 import com.duckdam.service.ComplimentService
 import com.duckdam.service.UserService
 import org.assertj.core.api.Assertions.assertThat
@@ -207,6 +208,56 @@ class ComplimentControllerTest {
             .exchange("${baseAddress}/compliments/$invalidId", HttpMethod.GET, httpEntity, Unit::class.java)
             .apply {
                 assertThat(statusCode).isEqualTo(HttpStatus.NOT_FOUND)
+            }
+    }
+
+    @Test
+    fun is_slot_throws_on_no_auth_token() {
+        // arrange
+        val httpHeaders = HttpHeaders()
+        val httpEntity = HttpEntity(null, httpHeaders)
+
+        // act, assert
+        restTemplate
+            .exchange("${baseAddress}/compliment/slot", HttpMethod.POST, httpEntity, Unit::class.java)
+            .apply {
+                assertThat(statusCode).isEqualTo(HttpStatus.FORBIDDEN)
+            }
+    }
+
+    @Test
+    fun is_slot_works_well() {
+        // arrange
+        val token: String = registerAndLogin()
+        val httpHeaders = HttpHeaders().apply {
+            this["Authorization"] = "Bearer $token"
+        }
+        val httpEntity = HttpEntity(null, httpHeaders)
+
+        // act, assert
+        restTemplate
+            .exchange("${baseAddress}/compliment/slot", HttpMethod.POST, httpEntity, ComplimentResponseDto::class.java)
+            .apply {
+                assertThat(statusCode).isEqualTo(HttpStatus.OK)
+            }
+    }
+
+    @Test
+    fun is_slot_throws_when_ineligible_to_draw_today() {
+        // arrange
+        val token: String = registerAndLogin()
+        val httpHeaders = HttpHeaders().apply {
+            this["Authorization"] = "Bearer $token"
+        }
+        val httpEntity = HttpEntity(null, httpHeaders)
+
+        complimentService.slot(mockUid)
+
+        // act, assert
+        restTemplate
+            .exchange("${baseAddress}/compliment/slot", HttpMethod.POST, httpEntity, Unit::class.java)
+            .apply {
+                assertThat(statusCode).isEqualTo(HttpStatus.FORBIDDEN)
             }
     }
 }
