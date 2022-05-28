@@ -57,6 +57,8 @@ class ComplimentServiceTest {
         complimentRepository.findById(complimentId).get().apply {
             assertThat(fromId).isEqualTo(uid1)
             assertThat(toId).isEqualTo(uid2)
+            assertThat(fromName).isEqualTo(mockRegisterDto.name)
+            assertThat(toName).isEqualTo("new")
         }
     }
 
@@ -93,6 +95,8 @@ class ComplimentServiceTest {
         assertThat(complimentList.size).isEqualTo(1)
         assertThat(complimentList[0].fromId).isEqualTo(uid1)
         assertThat(complimentList[0].toId).isEqualTo(uid2)
+        assertThat(complimentList[0].fromName).isEqualTo(mockRegisterDto.name)
+        assertThat(complimentList[0].toName).isEqualTo("new")
     }
 
     @Test
@@ -124,6 +128,8 @@ class ComplimentServiceTest {
         assertThat(complimentList.size).isEqualTo(1)
         assertThat(complimentList[0].fromId).isEqualTo(uid1)
         assertThat(complimentList[0].toId).isEqualTo(uid2)
+        assertThat(complimentList[0].fromName).isEqualTo(mockRegisterDto.name)
+        assertThat(complimentList[0].toName).isEqualTo("new")
     }
 
     @Test
@@ -169,6 +175,8 @@ class ComplimentServiceTest {
         complimentResponseDto.apply {
             assertThat(fromId).isEqualTo(-1)
             assertThat(toId).isEqualTo(uid1)
+            assertThat(fromName).isEqualTo("덕담")
+            assertThat(toName).isEqualTo(mockRegisterDto.name)
         }
         assertThat(complimentRepository.findAllByFromId(-1).size).isEqualTo(1)
     }

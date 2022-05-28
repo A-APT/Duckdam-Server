@@ -21,15 +21,19 @@ class ComplimentService (
     private val userRepository: UserRepository,
 ) {
     fun generateCompliment(fromId: Long, complimentRequestDto: ComplimentRequestDto): Long {
+        val fromUser: User = userRepository.findById(fromId).get()
+        lateinit var toUser: User
         runCatching {
-            userRepository.findById(complimentRequestDto.toId).get()
+            toUser = userRepository.findById(complimentRequestDto.toId).get()
         }.onFailure {
             throw NotFoundException("User [${complimentRequestDto.toId}] was not registered.")
         }
         return complimentRepository.save(Compliment(
             stickerNum = complimentRequestDto.stickerNum,
             fromId = fromId,
+            fromName = fromUser.name,
             toId = complimentRequestDto.toId,
+            toName = toUser.name,
             message = complimentRequestDto.message,
             date = Date()
         )).id
@@ -126,7 +130,9 @@ class ComplimentService (
         val compliment: Compliment = Compliment(
             stickerNum = choice,
             fromId = -1, // slot
+            fromName = "덕담", // service name
             toId = userId,
+            toName = user.name,
             message = comment,
             date = Date()
         )

@@ -17,7 +17,13 @@ class Compliment (
     var fromId: Long, // uid
 
     @Column(nullable = false)
+    var fromName: String,
+
+    @Column(nullable = false)
     var toId: Long, // uid
+
+    @Column(nullable = false)
+    var toName: String,
 
     @Column(nullable = false)
     var message: String,
@@ -29,7 +35,7 @@ class Compliment (
 
     fun toComplimentResponseDto(): ComplimentResponseDto {
         return ComplimentResponseDto(
-            fromId, toId, stickerNum, message, date
+            fromId, fromName, toId, toName, stickerNum, message, date
         )
     }
 
