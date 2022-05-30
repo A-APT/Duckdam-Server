@@ -103,6 +103,9 @@ class UserServiceTest {
         loginResponseDto?.apply {
             assertThat(jwtTokenProvider.verifyToken(token)).isEqualTo(true)
             assertThat(jwtTokenProvider.getUserPK(token).toLong()).isEqualTo(uid)
+            assertThat(this.uid).isEqualTo(user.id)
+            assertThat(name).isEqualTo(user.name)
+            assertThat(profile).isEqualTo(user.profile)
         }
     }
 

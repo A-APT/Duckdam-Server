@@ -69,7 +69,13 @@ class UserService (
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(
-                LoginResponseDto(token = jwtToken.token, refreshToken = jwtToken.refreshToken)
+                LoginResponseDto(
+                    token = jwtToken.token,
+                    refreshToken = jwtToken.refreshToken,
+                    uid = user.id,
+                    name = user.name,
+                    profile = user.profile
+                )
             )
     }
 
