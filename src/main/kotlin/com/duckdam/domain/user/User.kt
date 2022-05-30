@@ -23,7 +23,7 @@ class User (
     var email: String,
 
     @Column(nullable = true)
-    var profile: String?, // byte64 encoded byte array
+    var profile: ByteArray?,
 
     @Column(nullable = false, length = 5)
     var sticker: String, // 00000 ~ 11111

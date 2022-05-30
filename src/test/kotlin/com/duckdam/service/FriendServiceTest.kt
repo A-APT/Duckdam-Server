@@ -93,7 +93,7 @@ class FriendServiceTest {
         // arrange
         val uid1: Long = userService.register(mockRegisterDto)
         val uid2: Long = userService.register(mockRegisterDto.copy(email = "email", name="name"))
-        val uid3: Long = userService.register(mockRegisterDto.copy(email = "email2", name = "new", profile = "test"))
+        val uid3: Long = userService.register(mockRegisterDto.copy(email = "email2", name = "new", profile = "test".toByteArray()))
 
         friendService.followFriend(uid1, uid2)
         friendService.followFriend(uid1, uid3)
@@ -104,6 +104,6 @@ class FriendServiceTest {
         // assert
         assertThat(friendList.size).isEqualTo(2)
         assertThat(friendList[0].name).isEqualTo("name")
-        assertThat(friendList[1].profile).isEqualTo("test")
+        assertThat(friendList[1].profile).isEqualTo("test".toByteArray())
     }
 }

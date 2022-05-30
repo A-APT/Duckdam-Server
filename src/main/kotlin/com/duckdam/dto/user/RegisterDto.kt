@@ -4,5 +4,5 @@ data class RegisterDto (
     val name: String,
     val password: String,
     val email: String,
-    val profile: String?
+    val profile: ByteArray?
 )
